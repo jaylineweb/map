@@ -102,14 +102,15 @@ transform:scale(1.3);
 .table_scroll:before, .table_scroll_acitve:before{display: none;}
 .table_scroll .scroll_notice{display: none;}
 @media all and (max-width:800px){
+    .btn-cell .p-button {display:block;margin-top:6px;padding:3%;font-size:14px;line-height:15px;}
+    .table{width:100%;font-size:15px;}
     .table_scroll{position:relative; max-width:100%; overflow-x:auto;}
     .table_scroll_acitve.table_scroll:before{display: none;}
     .table_scroll .scroll_notice{display: block;}
     .table_scroll table{min-width:800px;}
 }
 @media all and (max-width:640px){
-    .btn-cell .p-button {display:block;margin-top:6px;padding:3%;font-size:14px;line-height:15px;}
-    .table{width:100%;font-size:14px;}
+    .table{font-size:14px;}
     .table_unit{padding-left:20px; font-size:13px; line-height:15px;}
     .table .bu, .table .num,.table .dl,.table .dl2{margin-top:10px;margin-bottom:10px;}
     .table thead th{padding:10px 5px;}
