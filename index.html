@@ -41,21 +41,7 @@ transform:scale(1.3);
 .p-map-info__title {color:#222;text-align:center}
 .p-map-info__content {font-size:.95em;color:#666}
 .p-map-info__close {display:inline-block;width:14px;height:13px;margin-top:-3px;margin-left:4px;background:#fff url(./common/images/program/map_info_close.png) no-repeat;vertical-align:middle;font-size:0;}
-.btn-cell .p-button{
-  position: relative;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 5px;
-    box-sizing: border-box;
-    padding:11px 20px 13px 20px;
-    border:1px solid #ddd;
-    line-height: 24px;
-    text-align: left;
-    vertical-align: top;
-    font-size: 17px;
-    font-weight: 200;
-    letter-spacing: -0.04em;
-}
+.btn-cell .p-button{position:relative;border-width:1px;border-style:solid;border-radius:5px;box-sizing:border-box;padding:11px 20px 13px 20px;border:1px solid #ddd;line-height:24px;text-align:left;vertical-align:top;font-size:17px;font-weight:200;letter-spacing:-0.04em;}
   </style>
 </head>
 <body>
@@ -76,7 +62,10 @@ transform:scale(1.3);
       <tr>
         <td>1</td>
         <td>머무를 정 세이로무시</td>
-        <td>서울특별시 강남구 테헤란로64길 9, 107호 (대치동 890-49)</td>
+        <td>
+          서울특별시 강남구 테헤란로64길 9, 107호 (대치동 890-49)
+          <a href="#none" class="copytext">주소복사</a>
+        </td>
         <td class="btn-cell">
           <button type="button" class="p-button" onclick="panTo('37.50447463121979', '127.05158890759301')">상세보기</button>
         </td>
@@ -84,7 +73,9 @@ transform:scale(1.3);
       <tr>
         <td>2</td>
         <td>편백찜 파르나스몰점</td>
-        <td>서울 강남구 테헤란로 521 지하1층 F7, 8호</td>
+        <td>서울 강남구 테헤란로 521 지하1층 F7, 8호
+          <a href="#none" class="copytext">주소복사</a>
+        </td>
         <td class="btn-cell">          
           <button type="button" class="p-button" onclick="panTo('37.50917349007885', '127.06081007200204')">상세보기</button>
         </td>
@@ -92,7 +83,9 @@ transform:scale(1.3);
       <tr>
         <td>3</td>
         <td>투다리 대치본점</td>
-        <td>서울 강남구 삼성로 231 금마빌딩 1층 105호</td>
+        <td>서울 강남구 삼성로 231 금마빌딩 1층 105호
+          <a href="#none" class="copytext">주소복사</a>
+        </td>
         <td class="btn-cell">
           <button type="button" class="p-button" onclick="panTo('37.49781622483026', '127.06098745374884')">상세보기</button>
         </td>
@@ -106,7 +99,7 @@ transform:scale(1.3);
     
     
 </div>
-<script src="/common/js/map.js"></script>
+<script src="./common/js/map.js"></script>
 <script>
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
