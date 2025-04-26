@@ -269,5 +269,39 @@ transform:scale(1.3);
         map.panTo(moveLatLon);
     }
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".copytext").forEach(function(copyBtn) {
+      copyBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+  
+        const td = this.closest("td");
+        const clonedTd = td.cloneNode(true);
+  
+        // 버튼 요소 제거
+        const btnToRemove = clonedTd.querySelector(".copytext");
+        if (btnToRemove) {
+          btnToRemove.remove();
+        }
+  
+        const textToCopy = clonedTd.textContent.trim();
+  
+        // 복사 처리
+        const textarea = document.createElement("textarea");
+        textarea.value = textToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          const successful = document.execCommand("copy");
+          alert(successful ? "주소가 복사되었습니다." : "복사에 실패했습니다.");
+        } catch (err) {
+          alert("복사 기능이 지원되지 않습니다.");
+        }
+        document.body.removeChild(textarea);
+      });
+    });
+  });
+  </script>
+  
 </body>
 </html>
