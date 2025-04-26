@@ -222,18 +222,24 @@ h1 {text-align:center;margin-bottom:30px;}
             title: '머무를 정 세이로무시',
             lat: 37.50447463121979,
             lng: 127.05158890759301,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/머무를 정 세이로무시,37.50447463121979,127.05158890759301'
           },
           
           {
             title: '편백찜 파르나스몰점',
             lat: 37.50917349007885,
             lng: 127.06081007200204,
-            markerzindex: 1
-        },
-        {
+            markerzindex: 1,
+            //kakaoLink: 'https://kko.kakao.com/ACZ8PwMBci'
+            kakaoLink: 'https://map.kakao.com/link/to/편백찜 파르나스몰점,37.50917349007885,127.06081007200204'
+          },
+          {
             title: '투다리 대치본점',
             lat: 37.49781622483026,
             lng: 127.06098745374884,
+            //kakaoLink: 'https://kko.kakao.com/cs8vkPzAQI'
+            kakaoLink: 'https://map.kakao.com/link/to/투다리 대치본점,37.49781622483026,127.06098745374884'
         },
     ];
     //마커 이미지 설정
@@ -253,6 +259,15 @@ h1 {text-align:center;margin-bottom:30px;}
             //title : pos.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             image : markerImage // 마커 이미지
         });
+
+         // ✅ 마커 클릭 시 카카오톡 링크로 이동
+        if (pos.kakaoLink) {
+            daum.maps.event.addListener(marker, 'click', function() {
+                window.open(pos.kakaoLink, '_blank');
+            });
+        }
+        
+        // 마커에 클릭 이벤트를 등록합니다
         var customOverlay = new daum.maps.CustomOverlay({
             position: latlng
         });
