@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오시는 길</title>
+<link rel="stylesheet" href="./common/css/default.css">
+<link rel="stylesheet" href="./common/css/font.css">
+<script src="./common/js/jquery-1.12.4.min.js"></script>
+<script src="./common/js/map.js"></script>
+<script src="./common/js/program.js"></script>
+<style>
+body {padding:40px;background-color:#f8f8f8;font-family:'Noto Sans KR', sans-serif;color:#333;}
+h1 {text-align:center;margin-bottom:30px;}
+.map-container {display:flex;width:80%;justify-content:center;margin-bottom:30px;margin-right:auto;margin-left:auto;}
+.location-table {width:100%;max-width:900px;margin:0 auto;border-collapse:collapse;background-color:#fff;box-shadow:0 2px 8px rgba(0, 0, 0, 0.1);}
+.location-table th,.location-table td {padding:15px;border:1px solid #ddd;text-align:center;}
+.location-table th {background-color:#f0f0f0;}
+.btn-cell {text-align:center;}
+.btn-cell input[type="checkbox"] {transform:scale(1.3);}
+.card {position:relative;margin-bottom:12px;padding:12px;background:#fff;border:1px solid #d1d1d1;border-radius:0;box-sizing:border-box;}
+@media all and (max-width:1000px){
+  .map-container{width:100%;}
+  .card{height:300px !important;}
+}
+.p-map-info {position:relative;padding:1px 10px 3px;top:-60px;background:#fff;border:1px solid #bbb;border-radius:4px}
+.p-map-info--multi {top:-73px}
+.p-map-info:after,.p-map-info:before {display:block;position:absolute;left:50%;width:0;height:0;bottom:-7px;border-left:7px solid transparent;border-right:7px solid transparent;transform:rotate(180deg)}
+.p-map-info:before {border-bottom:7px solid #000;margin:-7px 0 0 -7px}
+.p-map-info:after {border-bottom:7px solid #fff;margin:-6px 0 0 -7px}
+.p-map-info__title {color:#222;text-align:center}
+.p-map-info__content {font-size:.95em;color:#666}
+.p-map-info__close {display:inline-block;width:14px;height:13px;margin-top:-3px;margin-left:4px;background:#fff url(./common/images/program/map_info_close.png) no-repeat;vertical-align:middle;font-size:0;}
+.btn-cell .p-button{position:relative;border-width:1px;border-style:solid;border-radius:5px;box-sizing:border-box;padding:11px 20px 13px 20px;border:1px solid #ddd;line-height:24px;text-align:left;vertical-align:top;font-size:17px;font-weight:200;letter-spacing:-0.04em;}
+/* 테이블 */
+.table_unit{position:relative;display:block;margin-top:-20px; margin-bottom:10px; padding-left:25px; font-size:15px; line-height:17px; color:#898d9f; text-align:right;}
+.table_unit:before{display:inline-block; position:relative; top:1px; width:14px; height:14px;padding-right:5px; background:url(/site/public/images/template/template_title.svg#point_icon02) no-repeat; background-size:14px 14px;}
+
+.table{width:80%; margin:20px auto; background-color:#fff; border-top:1px solid #e0e1e3; font-size:16px; line-height:24px;}/*20240326*/
+.table.vertical_top tr th,.table.vertical_top tr td {vertical-align:top}
+.table.vertical_middle tr th,.table.vertical_middle tr td {vertical-align:middle;}
+.table.vertical_bottom tr th,.table.vertical_bottom tr td {vertical-align:bottom;}
+.table.fixed{table-layout:fixed;}
+.table .caption{display:none;}
+.table.text_center tbody tr td {text-align:center;}
+.table.text_left tbody tr td {text-align:left;}
+.table.text_left tbody tr th,.table.text_left thead tr th  {text-align:center;}
+.table.break tbody td,.table.break thead th,.table.break tbody td,.table.break tbody th{word-break:break-all;}
+.table thead th{padding:14px 10px;border:1px solid #e0e1e3;border-bottom-color:#c5c9d6;background-color:#f4f5f9;color:#4a506b;font-weight: 600;text-align:center;}
+.table thead th + th{border-left:1px solid #e0e1e3;}
+.table thead th:first-child{border-left:none;}
+.table thead th:last-child{border-right:none;}
+.table tbody th, .table tfoot th{background-color:#fbfcfd; font-weight:200; color:#0b356c;}
+.table tbody th, .table tbody td, .table tfoot th, .table tfoot td{padding:14px 10px; border-bottom:1px solid #e0e1e3; border-right:1px solid #e0e1e3; font-weight:500; color:#000000;}
+.table tbody th{font-size:15px;color:#575c70;font-weight: 400;}
+
+.table tfoot td:first-child{border-left:none;}
+.table tbody tr th:last-child{/* border-right:none; */}
+.table td:last-child{border-right:none;}
+.table td[rowspan]:first-child{border-right:1px solid #e0e1e3;}
+.table tbody th + td, .table tbody td + td, .table tfoot td{border-left:1px solid #d5d8dd;}
+/*.table tbody tr:first-child th, .table tbody tr:first-child td{border-top:1px solid #c5c9d6;}*/
+.table tbody td, .table tfoot td{text-align:center;}
+.table tbody td input, .table tfoot td input {border: 1px solid #969696;box-sizing: border-box;width: 100%;padding: 1px 6px;}
+.table tbody td input[type="button"], .table tfoot td input[type="button"] { width: 88px;}
+.table tbody td.text_right, .table tfoot td.text_right{text-align:right;}
+.table tbody td ul{margin-top:0; margin-bottom:0; padding-left:10px;}
+.table tbody td ul.bu_clear{padding-left:0;}
+.table tbody td ol{margin-top:0; margin-bottom:0;}
+.table{position:relative;}
+.table:before{display:block; position:absolute; bottom:0; left:0; width:100%; height:1px; background-color:#9da5c1;}
+.table .bu > li > ul >li > ul > li:before, .table .num > li > ul >li > ul > li:before, .table p.blt.type3:before, .table .bu.third > li:before {top:15px;}
+
+/* thead에 tr이 두 개 이상일 때 */
+.table.tr_over thead th{border-bottom:none; background-color:#fbfcfd;}
+.table.tr_over tbody tr:first-child th,
+.table.tr_over tbody tr:first-child td{border-top:1px solid #c5c9d6;}
+.table.tr_over caption + thead tr:first-child th, .table.tr_over caption + thead tr:first-child td, .table.tr_over colgroup + thead tr:first-child th, .table.tr_over colgroup + thead tr:first-child td, .table.tr_over caption + tbody tr:first-child th, .table.tr_over caption + tbody tr:first-child td, .table.tr_over colgroup + tbody tr:first-child th{background-color:#f4f5f9;font-size:15px;font-weight: 600;color:#575c70;}
+
+/* 세로형 테이블 */
+.table.type2{border-top:0;}
+.table.type2 tbody th{background-color:#f4f5f9;font-weight: 600;color:#4a506b;}
+.table.type2 tbody td{text-align:left; color:#636363;}
+.table.type2 tbody tr:first-child{border-top:2px solid #4d5980;}
+.table.type2 tbody tbody th{background-color:#f4f5f9;font-weight: 600;color:#4a506b;}
+.table.type2 tbody tbody td{text-align:center; color:#636363;}
+.table.type2 tbody tbody tr:first-child{border-top:2px solid #4d5980;}
+
+/* 스크롤 테이블 */
+.table_scroll{margin:10px 0 10px;}
+.table_scroll table{margin:0;}
+.table_scroll:before, .table_scroll_acitve:before{display: none;}
+.table_scroll .scroll_notice{display: none;}
+@media all and (max-width:800px){
+    .btn-cell .p-button {display:block;margin-top:6px;padding:3%;font-size:14px;line-height:15px;}
+    .table{width:100%;font-size:15px;}
+    .table_scroll{position:relative; max-width:100%; overflow-x:auto;}
+    .table_scroll_acitve.table_scroll:before{display: none;}
+    .table_scroll .scroll_notice{display: block;}
+    .table_scroll table{min-width:800px;}
+}
+@media all and (max-width:640px){
+    .table{font-size:14px;}
+    .table_unit{padding-left:20px; font-size:13px; line-height:15px;}
+    .table .bu, .table .num,.table .dl,.table .dl2{margin-top:10px;margin-bottom:10px;}
+    .table thead th{padding:10px 5px;}
+    .table tbody th, .table tbody td, .table tfoot th, .table tfoot td{padding:10px 5px;}
+
+    /* 반응형 테이블 */
+    table.table.responsive{border-top:#a6a6a6 solid 1px;}
+    table.table.responsive thead{display:none;}
+    table.table.responsive colgroup{display:none;}
+    table.table.responsive tbody tr{position:relative; display:block; padding:5px 4px; border-bottom:1px solid #d9d9d9;}
+    table.table.responsive tbody tr:after{display:block; clear:both; content:"."; visibility:hidden; height:0;}
+    table.table.responsive tbody td{display:block; float:left; width:100%; padding:4px 3%; border:none; text-align:left !important; box-sizing:border-box; background-color:transparent;}
+    table.table.responsive tbody th{display:block; float:left; width:100%; padding:4px 3%; color:#555; text-align:left; vertical-align:middle; background-color:transparent; border:none;}
+    table.table.responsive tbody tr:first-child td, table.table.responsive tbody tr:first-child th{border-top:none;}
+    table.table.responsive tbody th:before, table.table.responsive tbody td:before{display:inline; content:attr(data-content)' : ';}/* theadì˜ ë‚´ìš©ì„ tbodyì˜ th, tdì— ê°ê° ì‚½ìž… */
+    table.table.responsive tfoot tr{position:relative; display:block; border-bottom:1px solid #d9d9d9;}
+    table.table.responsive tfoot tr:after{display:block; clear:both; content:"."; visibility:hidden; height:0;}
+    table.table.responsive tfoot tr:nth-child(odd){background:#f8f8f8;}
+    table.table.responsive tfoot td{display:block; padding:4px 3%; border:none; text-align:left; box-sizing:border-box; background-color:transparent;}
+    table.table.responsive tfoot th{display:block; padding:4px 3%; text-align:left; vertical-align:middle; background-color:transparent; border:none;}
+    table.table.responsive tfoot tr:first-child td, table.table.responsive tfoot tr:first-child th{border-top:none;}
+    table.table.responsive tfoot th:before, table.table.responsive tfoot td:before{display:inline; content:attr(data-content)' : ';}/* theadì˜ ë‚´ìš©ì„ tbodyì˜ th, tdì— ê°ê° ì‚½ìž… */
+    table.table.responsive.type2 tbody th:before, table.table.responsive.type2 tbody td:before{display:none;}
+    table.table.responsive.type2 tfoot th:before, table.table.responsive.type2 tfoot td:before{display:none;}
+}
+.br{display:none;}
+.copytext,.roadview_btn{padding:5px;background-color:#0a4ba5;color:#fff;text-decoration:none;border-radius:5px;font-size:0.95em;}
+@media all and (max-width:800px){
+  body{padding-right:5px;padding-left:5px;}
+  .br{display:block;}
+  .copytext,.roadview_btn{margin-top:0.8em;text-align:center;}
+}
+  </style>
+</head>
+<body>
+  <h1>오시는 길</h1>
+  <div class="map-container">
+    <div class="card" id="map" style="width:100%;height:400px;"></div>
+  </div>
+  <table class="table responsive">
+    <thead>
+      <tr>
+        <th scope="col">순번</th>
+        <th scope="col">장소</th>
+        <th scope="col">위치</th>
+        <th scope="col">문의처</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>오선채</td>
+        <td>서울 서초구 남부순환로 2634-8
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+          <br class="br"><a href="https://map.kakao.com/link/roadview/37.48497727230085,127.03867173081645" class="roadview_btn">로드뷰 보기</a>
+        </td>
+        <td class="btn-cell">
+          <button type="button" class="p-button" onclick="panTo('37.484765534440825', '127.03867444834542')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>투다리 대치본점</td>
+        <td>서울 강남구 삼성로 231 금마빌딩 1층 105호
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+          <br class="br"><a href="https://map.kakao.com/link/roadview/37.49793775097691,127.061199589758" class="roadview_btn">로드뷰 보기</a>
+        </td>
+        <td class="btn-cell">
+          <button type="button" class="p-button" onclick="panTo('37.49781622483026', '127.06098745374884')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>머무를 정 세이로무시</td>
+        <td>
+          서울특별시 강남구 테헤란로64길 9, 107호 (대치동 890-49)
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+        </td>
+        <td class="btn-cell">
+          <button type="button" class="p-button" onclick="panTo('37.50447463121979', '127.05158890759301')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>선릉도원</td>
+        <td>서울 강남구 삼성로85길 39, 2층
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+        </td>
+        <td class="btn-cell">          
+          <button type="button" class="p-button" onclick="panTo('37.504313457632094', '127.0543653063086')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>공간나인 선릉점</td>
+        <td>서울 강남구 테헤란로53길 15-3
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+        </td>
+        <td class="btn-cell">          
+          <button type="button" class="p-button" onclick="panTo('37.5052921181535', '127.0465905565064')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+      <tr>
+        <td>6</td>
+        <td>참치공방 선릉점</td>
+        <td>서울 강남구 테헤란로53길 15-3
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+        </td>
+        <td class="btn-cell">          
+          <button type="button" class="p-button" onclick="panTo('37.504313457632094', '127.0543653063086')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>편백찜 파르나스몰점</td>
+        <td>서울 강남구 테헤란로 521 지하1층 F7, 8호
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+        </td>
+        <td class="btn-cell">          
+          <button type="button" class="p-button" onclick="panTo('37.50917349007885', '127.06081007200204')">상세보기</button>
+        </td>
+      </tr>
+      
+    </tbody>
+  </table>
+
+
+
+    
+    
+  <script>
+    $(document).ready(function() {
+      $('table.table.responsive').not($('.prettyprint').children()).each(function() {
+            var RowSpanExist = $(this).find('td, th').is('[rowspan]'),
+                TheadExist = $(this).find('thead').length;
+            if((RowSpanExist==false) && (TheadExist!=0)){//rowspan이 없을 경우만 실행 (rowspan이 있으면 지원불가)
+                $(this).children('tbody').children('tr').find('th, td').each(function() {
+                    var ThisIndex = $(this).index(),
+                        TheadText = $(this).parents('tbody').siblings('thead').find('th').eq(ThisIndex).text();
+                    $(this).attr('data-content', TheadText);
+                });
+                $(this).children('tfoot').children('tr').find('th, td').each(function() {
+                    var ThisIndex = $(this).index(),
+                        TheadText = $(this).parents('tfoot').siblings('thead').find('th').eq(ThisIndex).text();
+                    $(this).attr('data-content', TheadText);
+                });
+            };
+        });
+    });
+  </script>
+</div>
+<script src="./common/js/map.js"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new daum.maps.LatLng(37.484765534440825, 127.03867444834542), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+    var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+    var positions = [
+        {
+            title: '오선채',
+            lat: 37.484765534440825,
+            lng: 127.03867444834542,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/오선채,37.484765534440825,127.03867444834542'
+          },
+        {
+            title: '참치공방 선릉점',
+            lat: 37.504313457632094,
+            lng: 127.0543653063086,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/참치공방 선릉점,37.504313457632094,127.0543653063086'
+          },
+        {
+            title: '머무를 정 세이로무시',
+            lat: 37.50447463121979,
+            lng: 127.05158890759301,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/머무를 정 세이로무시,37.50447463121979,127.05158890759301'
+          },
+          
+          {
+            title: '편백찜 파르나스몰점',
+            lat: 37.50917349007885,
+            lng: 127.06081007200204,
+            markerzindex: 1,
+            //kakaoLink: 'https://kko.kakao.com/ACZ8PwMBci'
+            kakaoLink: 'https://map.kakao.com/link/to/편백찜 파르나스몰점,37.50917349007885,127.06081007200204'
+          },
+          {
+            title: '투다리 대치본점',
+            lat: 37.49781622483026,
+            lng: 127.06098745374884,
+            //kakaoLink: 'https://kko.kakao.com/cs8vkPzAQI'
+            kakaoLink: 'https://map.kakao.com/link/to/투다리 대치본점,37.49781622483026,127.06098745374884'
+        },
+          /*{
+            //('37.504313457632094', '127.0543653063086')
+            title: '선릉도원',
+            lat: 37.504313457632094,
+            lng: 127.0543653063086,
+            //kakaoLink: 'https://kko.kakao.com/cs8vkPzAQI'
+            kakaoLink: 'https://map.kakao.com/link/to/선릉도원,37.504313457632094,127.0543653063086'
+        },*/
+          {
+            //('37.504313457632094', '127.0543653063086')
+            title: '공간나인 선릉점',
+            lat: 37.5052921181535,
+            lng: 127.0465905565064,
+            //kakaoLink: 'https://kko.kakao.com/cs8vkPzAQI'
+            kakaoLink: 'https://map.kakao.com/link/to/선릉도원,37.5052921181535,127.0465905565064'
+        },
+    ];
+    //마커 이미지 설정
+    var imageSrc = './common/images/program/map_marker.png',
+        imageSize = new daum.maps.Size(32, 42),
+        imageOption = {offset: new daum.maps.Point(13, 42)};
+
+        var dispalyCloseBtn = true; //정보창 닫기 버튼 표시 여부
+    positions.forEach(function(pos) {
+        var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption);
+        // 마커를 생성합니다
+        var latlng = new daum.maps.LatLng(pos.lat, pos.lng);
+        var marker = new daum.maps.Marker({
+            map: map, // 마커를 표시할 지도
+            position: latlng, // 마커를 표시할 위치
+            //title : pos.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            image : markerImage // 마커 이미지
+        });
+
+         // ✅ 마커 클릭 시 카카오톡 링크로 이동
+        if (pos.kakaoLink) {
+            daum.maps.event.addListener(marker, 'click', function() {
+                window.open(pos.kakaoLink, '_blank');
+            });
+        }
+
+        // 마커에 클릭 이벤트를 등록합니다
+        var customOverlay = new daum.maps.CustomOverlay({
+            position: latlng
+        });
+        var content = document.createElement('div');
+        content.className = "p-map-info";
+        var title = document.createElement('div');
+        title.className ="p-map-info__title";
+        title.appendChild(document.createTextNode(pos.title));
+        content.appendChild(title);
+        //정보창 닫기 버튼 추가 여부
+        if(dispalyCloseBtn){
+            var closeBtn = document.createElement('button');
+            closeBtn.className ="p-map-info__close";
+            closeBtn.appendChild(document.createTextNode('닫기'));
+            closeBtn.onclick = function() { customOverlay.setMap(null); };
+            title.appendChild(closeBtn);
+        }
+        //정보 유무 확인
+        if(pos.content){
+            var info = document.createElement('div');
+            info.className ="p-map-info__content";
+            info.appendChild(document.createTextNode(pos.content));
+            content.appendChild(info);
+            content.className = "p-map-info p-map-info--multi";
+        }
+        customOverlay.setContent(content);
+        customOverlay.setMap(map);
+    });
+    function panTo(lat, lng) {
+      var moveLatLon = new daum.maps.LatLng(lat, lng);
+      map.panTo(moveLatLon);
+
+      const mapDiv = document.getElementById('map');
+      mapDiv.setAttribute('tabindex', '0');
+      mapDiv.focus(); // 필요할 경우!
+    }
+
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".copytext").forEach(function(copyBtn) {
+      copyBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        const td = this.closest("td");
+        const clonedTd = td.cloneNode(true);
+
+        // 버튼 요소 제거
+        const btnToRemove = clonedTd.querySelector(".copytext");
+        if (btnToRemove) {
+          btnToRemove.remove();
+        }
+
+        const textToCopy = clonedTd.textContent.trim();
+
+        // 복사 처리
+        const textarea = document.createElement("textarea");
+        textarea.value = textToCopy;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          const successful = document.execCommand("copy");
+          alert(successful ? "주소가 복사되었습니다." : "복사에 실패했습니다.");
+        } catch (err) {
+          alert("복사 기능이 지원되지 않습니다.");
+        }
+        document.body.removeChild(textarea);
+      });
+    });
+  });
+  </script>
+</body>
+</html>
