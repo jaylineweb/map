@@ -370,9 +370,14 @@ h1 {text-align:center;margin-bottom:30px;}
         customOverlay.setMap(map);
     });
     function panTo(lat, lng) {
-        var moveLatLon = new daum.maps.LatLng(lat, lng);
-        map.panTo(moveLatLon);
+      var moveLatLon = new daum.maps.LatLng(lat, lng);
+      map.panTo(moveLatLon);
+
+      const mapDiv = document.getElementById('map');
+      mapDiv.setAttribute('tabindex', '0');
+      mapDiv.focus(); // 필요할 경우!
     }
+
 </script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
