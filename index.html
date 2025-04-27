@@ -254,6 +254,9 @@ h1 {text-align:center;margin-bottom:30px;}
 </div>
 <script src="./common/js/map.js"></script>
 <script>
+/*
+37.48474976772167', '127.03867161355255
+*/
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div
         mapOption = {
             center: new daum.maps.LatLng(37.504313457632094, 127.0543653063086), // 지도의 중심좌표
@@ -261,6 +264,14 @@ h1 {text-align:center;margin-bottom:30px;}
         };
     var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
     var positions = [
+
+{
+            title: '오선채',
+            lat:37.48474976772167 ,
+            lng: 127.03867161355255,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/오선채,37.48474976772167, '127.03867161355255'
+          },
         {
             title: '참치공방 선릉점',
             lat: 37.504313457632094,
@@ -268,6 +279,7 @@ h1 {text-align:center;margin-bottom:30px;}
             //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
             kakaoLink: 'https://map.kakao.com/link/to/참치공방 선릉점,37.504313457632094,127.0543653063086'
           },
+
         {
             title: '머무를 정 세이로무시',
             lat: 37.50447463121979,
