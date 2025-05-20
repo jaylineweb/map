@@ -153,6 +153,18 @@ h1 {text-align:center;margin-bottom:30px;}
     <tbody>
       <tr>
         <td>1</td>
+        <td>하루덕 구리본점</td>
+        <td>경기 구리시 건원대로99번길 99
+          <br class="br"><a href="#none" class="copytext">주소복사</a>
+          <br class="br"><a href="https://map.kakao.com/link/roadview/37.60591269083439,127.13899990497767" class="roadview_btn">로드뷰 보기</a>
+        </td>
+        <td class="btn-cell">
+          <p style="margin-bottom:10px;"><a href="tel:02-578-9411">02-578-9411</a></p>
+          <button type="button" class="p-button" onclick="panTo('37.60591269083439', '127.13899990497767')">상세보기</button>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
         <td>오선채</td>
         <td>서울 서초구 남부순환로 2634-8
           <br class="br"><a href="#none" class="copytext">주소복사</a>
@@ -264,6 +276,13 @@ h1 {text-align:center;margin-bottom:30px;}
         };
     var map = new daum.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
     var positions = [
+        {
+            title: '하루덕',
+            lat: 37.60591269083439,
+            lng: 127.13899990497767,
+            //kakaoLink: 'https://kko.kakao.com/PNz-r8Jxq9'
+            kakaoLink: 'https://map.kakao.com/link/to/오선채,37.60591269083439,127.13899990497767'
+          },
         {
             title: '오선채',
             lat: 37.484765534440825,
